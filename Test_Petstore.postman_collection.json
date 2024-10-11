@@ -1,0 +1,1177 @@
+{
+	"info": {
+		"_postman_id": "e8853453-00e5-42ec-89cb-0e21ec1b2e64",
+		"name": "Test Petstore",
+		"description": "Swagger Petstore on [https://petstore.swagger.io/](https://petstore.swagger.io/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34803877"
+	},
+	"item": [
+		{
+			"name": "Pet func",
+			"item": [
+				{
+					"name": "Add new pet to the store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"name\", \"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.status).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value of 'status' is correct\", function () { \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect([\"available\", \"sold\", \"pending\"]).to.include(jsonData.status);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomValues = ['available', 'sold', 'pending']; // Массив с вашими значениями\r",
+									"const randomIndex = Math.floor(Math.random() * randomValues.length); // Генерация случайного индекса\r",
+									"const randomValue = randomValues[randomIndex]; // Получение случайного значения\r",
+									"\r",
+									"pm.collectionVariables.set('status', randomValue); // Сохранение значения в коллекционную переменную\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{$randomInt}},\r\n  \"category\": {\r\n    \"id\": {{$randomInt}},\r\n    \"name\": \"{{$randomCompanyName}}\"\r\n  },\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"photoUrls\": [\r\n    \"{{$randomImageUrl}}\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": {{$randomInt}},\r\n      \"name\": \"{{$randomStreetName}}\"\r\n    }\r\n  ],\r\n  \"status\": \"{{status}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{pet}}",
+							"host": [
+								"{{url}}{{pet}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updates a pet in the store with form data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Kevin",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{pet}}{{pet_id}}",
+							"host": [
+								"{{url}}{{pet}}{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Uploads an image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "additionalMetadata",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1ef7fd21-c4c5-4900-acad-970509818515"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{pet}}{{pet_id}}/uploadImage",
+							"host": [
+								"{{url}}{{pet}}{{pet_id}}"
+							],
+							"path": [
+								"uploadImage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"name\", \"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.status).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value of 'status' is correct\", function () { \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect([\"available\", \"sold\", \"pending\"]).to.include(jsonData.status);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{pet_id}},\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"Steve\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{pet}}",
+							"host": [
+								"{{url}}{{pet}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fing pet by ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"name\", \"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.status).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value of 'status' is correct\", function () { \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect([\"available\", \"sold\", \"pending\"]).to.include(jsonData.status);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{pet}}{{pet_id}}",
+							"host": [
+								"{{url}}{{pet}}{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fing pet by status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{pet}}findByStatus?status=sold,available,pending",
+							"host": [
+								"{{url}}{{pet}}findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "sold,available,pending",
+									"description": "requierd (available, pending, sold)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletes a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{pet}}{{pet_id}}",
+							"host": [
+								"{{url}}{{pet}}{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Everything about your Pets"
+		},
+		{
+			"name": "Store func",
+			"item": [
+				{
+					"name": "Returns pet inventories by status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{store}}inventory",
+							"host": [
+								"{{url}}{{store}}inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place an order for a pet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require('moment');\r",
+									"pm.collectionVariables.set('date', moment().format('YYYY-MM-DDTHH:mm:ss'));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"petId\", \"quantity\", \"shipDate\", \"status\", \"complete\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.shipDate).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.status).to.be.a('string');\r",
+									"    pm.expect(jsonData.complete).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.petId).to.be.a('number');\r",
+									"    pm.expect(jsonData.quantity).to.be.a('number');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{order_id}},\r\n  \"petId\": {{pet_id}},\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"{{date}}\",\r\n  \"status\": \"placed\",\r\n  \"complete\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{store}}order",
+							"host": [
+								"{{url}}{{store}}order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find purchase order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"petId\", \"quantity\", \"shipDate\", \"status\", \"complete\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.shipDate).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.status).to.be.a('string');\r",
+									"    pm.expect(jsonData.complete).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.petId).to.be.a('number');\r",
+									"    pm.expect(jsonData.quantity).to.be.a('number');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{store}}order/{{order_id}}",
+							"host": [
+								"{{url}}{{store}}order"
+							],
+							"path": [
+								"{{order_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete purchase order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{store}}order/{{order_id}}",
+							"host": [
+								"{{url}}{{store}}order"
+							],
+							"path": [
+								"{{order_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Access to Petstore orders"
+		},
+		{
+			"name": "User func",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"{{pass}}\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{user}}",
+							"host": [
+								"{{url}}{{user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creates list of users with given input array",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.be.equal('ok');\r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"username\": \"Dorch\",\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"password\": \"string\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  },\r\n   {\r\n    \"id\": 0,\r\n    \"username\": \"Gorch\",\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"password\": \"string\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  },\r\n   {\r\n    \"id\": 0,\r\n    \"username\": \"Borch\",\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"password\": \"string\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{user}}createWithArray",
+							"host": [
+								"{{url}}{{user}}createWithArray"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logs user into the system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.be.include('logged');\r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{pass}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{user}}login",
+							"host": [
+								"{{url}}{{user}}login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logs out current logged in user session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.be.include('ok');\r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{user}}logout",
+							"host": [
+								"{{url}}{{user}}logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creates list of users with given input array",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.be.include('ok');\r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"password\": \"{{pass}}\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{user}}createWithList",
+							"host": [
+								"{{url}}{{user}}createWithList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by user name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"id\", \"username\", \"firstName\", \"lastName\", \"email\", \"password\", \"phone\", \"userStatus\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.username).to.be.a('string');\r",
+									"    pm.expect(jsonData.firstName).to.be.a('string');\r",
+									"    pm.expect(jsonData.lastName).to.be.a('string');\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"    pm.expect(jsonData.password).to.be.a('string');\r",
+									"    pm.expect(jsonData.phone).to.be.a('string');\r",
+									"    pm.expect(jsonData.userStatus).to.be.a('number');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{user}}{{username}}",
+							"host": [
+								"{{url}}{{user}}{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"   // pm.expect(jsonData.message).to.be.include('ok'); \r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Loinak\",\r\n  \"lastName\": \"Serpey\",\r\n  \"email\": \"string\",\r\n  \"password\": \"{{pass}}\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{user}}{{username}}",
+							"host": [
+								"{{url}}{{user}}{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 999ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(999);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains all expected properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.keys(\"code\", \"type\", \"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields correct data\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.type).to.be.a('string');\r",
+									"    pm.expect(jsonData.code).to.be.a('number');\r",
+									"    pm.expect(jsonData.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"   // pm.expect(jsonData.message).to.include('ok'); \r",
+									"    pm.expect(jsonData.code).to.be.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{user}}{{username}}",
+							"host": [
+								"{{url}}{{user}}{{username}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Operations about user"
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "special-key",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "string"
+		},
+		{
+			"key": "pet_id",
+			"value": "6969",
+			"type": "string"
+		},
+		{
+			"key": "pet",
+			"value": "/pet/",
+			"type": "string"
+		},
+		{
+			"key": "store",
+			"value": "/store/",
+			"type": "string"
+		},
+		{
+			"key": "user",
+			"value": "/user/",
+			"type": "string"
+		},
+		{
+			"key": "order_id",
+			"value": "10",
+			"type": "string"
+		},
+		{
+			"key": "date",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pass",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "status",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
